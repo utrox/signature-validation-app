@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+import mimetypes
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,17 +22,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o#9l%2$+6^00s^44+_(_^7-bq^y_=rajgzn=m71j!t$7ep_w_z'
+SECRET_KEY = os.environ.get('APP_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+IS_PRODUCTION = os.environ.get('APP_ENV', 'development') == 'production'
+DEBUG = os.environ.get('APP_DEBUG', 'False' if IS_PRODUCTION else 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.environ.get('APP_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,8 +46,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'core.exceptions.exception_handler.CustomExceptionHandlerMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -127,3 +132,41 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Set custom user model
 AUTH_USER_MODEL = 'users.User'
+
+
+# Because in a development environment the frontend and backend are served on different ports,
+# we need to set the CSRF_COOKIE_SAMESITE to 'Lax' in order to allow the frontend to send
+# cookies to the backend. In production, the frontend and backend are served on the same domain,
+# so we can set the CSRF_COOKIE_SAMESITE to 'Strict'.
+# Also, if you're accessing the frontend on localhost, make sure that the link in .env.development
+# is set to http://localhost:8000. Otherwise, if it's set to http://127.0.0.1:8000, you're going to spend 
+# hours debugging why the CSRF cookie is not being sent to the backend when you have everything set up correctly,
+# and you'll think about switching careers to be a tram driver instead.
+CSRF_COOKIE_SAMESITE = 'Strict' if IS_PRODUCTION else 'Lax'
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,http://localhost:8000').split(',')
+
+CORS_ALLOWED_ORIGINS = os.environ.get('APP_CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:8000').split(',')
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'x-csrftoken',
+    'csrftoken',
+    'authorization',
+]
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",  # Make sure OPTIONS is allowed for preflight
+]
+
+
+# Add mimetypes for css and js files, otherwise in production the following
+# error will be raised by the browser:
+# Failed to load module script: Expected a JavaScript module script but the server
+# responded with a MIME type of "text/html".
+# Strict MIME type checking is enforced for module scripts per HTML spec.
+mimetypes.add_type("text/css", ".css", True)
+mimetypes.add_type("text/javascript", ".js", True)
