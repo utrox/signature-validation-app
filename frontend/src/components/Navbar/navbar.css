@@ -1,0 +1,69 @@
+.navbar {
+  z-index: 2;
+  background-color: white;
+  margin-bottom: 2rem;
+  padding: 0 1.25rem !important;
+  border-bottom: 1px solid grey;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2), 0px 0px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 0.25rem 0.25rem;
+}
+
+h1#logo {
+  left: 10%;
+  font-size: 2rem;
+  margin: 0;
+  padding: 1rem;
+  font-family: "KgSecondChancesSketch", Fallback, sans-serif;
+  color: var(--penblue);
+  font-weight: normal;
+}
+
+.nav-btns {
+  width: 100%;
+  max-width: 200px;
+  margin-left: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-btn {
+  padding: 0 0.5rem;
+}
+
+.nav-btn.active {
+  border-bottom: 3px solid black;
+}
+
+.nav-logo {
+  position: absolute;
+}
+
+.nav-pfp {
+  left: auto;
+}
+
+.nav-icon,
+.nav-pfp {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.nav-pfp {
+  height: 2rem;
+  width: 2rem;
+}
+
+@media (max-width: 500px) {
+  h1#logo {
+    padding: 0.5rem;
+  }
+  .navbar {
+    flex-direction: column;
+    padding: 0.5rem !important;
+  }
+
+  .nav-btns {
+    margin: 0.5rem 0;
+  }
+}

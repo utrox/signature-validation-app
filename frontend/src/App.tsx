@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 // import ConfirmationDialog from "./components/ConfirmDialog/index.tsx";
+import Main from "./Pages/Main";
 import { Login } from "./Pages/authentication/Login.tsx";
 import { Register } from "./Pages/authentication/Register.tsx";
 import { PrivateRoute } from "./components/Routing/PrivateRoute.tsx";
@@ -13,6 +14,7 @@ function App() {
       {/*TODO: implement <ConfirmationDialog isOpen={showModal} {...modalProps} /> */}
       <Routes>
         {/* Public routes */}
+        <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
