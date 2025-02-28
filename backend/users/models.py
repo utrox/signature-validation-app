@@ -13,6 +13,8 @@ class User(AbstractUser):
 
 
 class UserProfile(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=255)
     address = models.ForeignKey('Address', on_delete=models.CASCADE)
     phone = models.CharField(max_length=16)
     date_of_birth = models.DateField()
@@ -22,15 +24,10 @@ class UserProfile(models.Model):
         "address", "date_of_birth", "bank_account_number"
     ]
 
-    def save(self):
-        if self.is_staff:
-            self.bank_account_number = "-"
-
 
 class Address(models.Model):
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=60)
-    state = models.CharField(max_length=30)
     zipcode = models.CharField(max_length=8)
     country = models.CharField(max_length=50)
 
