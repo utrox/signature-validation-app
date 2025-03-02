@@ -24,6 +24,10 @@ class UserProfile(models.Model):
         "address", "date_of_birth", "bank_account_number"
     ]
 
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Address(models.Model):
     address = models.CharField(max_length=100)
@@ -31,8 +35,9 @@ class Address(models.Model):
     zipcode = models.CharField(max_length=8)
     country = models.CharField(max_length=50)
 
-    def get_formatted_address(self):
-        return f"{self.address}, {self.city}, {self.state}, {self.zipcode}, {self.country}"
+    @property
+    def formatted_address(self):
+        return f"{self.address}, {self.city}, {self.zipcode}, {self.country}"
 
     def __str__(self):
-        return self.get_formatted_address()
+        return self.formatted_address
