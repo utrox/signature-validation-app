@@ -14,7 +14,7 @@ from core.exceptions import (
     InternalServerError
 )
 from .validators import validate_password, validate_email
-from .fake_data import fake_profile
+from .fake_data import create_fake_profile
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -68,7 +68,7 @@ def register_view(request):
     validate_email(email)
 
     try:
-        user_profile = fake_profile()
+        user_profile = create_fake_profile()
     except Exception as e:
         logger.error("An error has occoured while generating fake user data.")
         print(e.__traceback__)
