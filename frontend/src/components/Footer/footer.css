@@ -9,4 +9,8 @@ footer {
   & > * {
     margin: auto;
   }
+
+  a {
+    color: blue !important;
+  }
 }

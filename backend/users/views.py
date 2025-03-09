@@ -94,5 +94,6 @@ def me_view(request):
         return JsonResponse(None, safe=False)
 
     return JsonResponse({
-        "first_name": "Bence"
+        "first_name": "Bence",
+        "is_signatures_recorded": True,
     })

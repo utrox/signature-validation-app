@@ -1,4 +1,6 @@
-<!-- Generated with Word from a .docx file, that's why the HTML code is such a mess. -->
+<!-- Generated with Word from a .docx file, that's why this is such a mess. -->
+
+{% load template_utils %}
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
@@ -135,7 +137,7 @@
         "
       >
         <span lang="HU"
-          >This agreement is made on {{utils.todays_date}} between
+          >This agreement is made on {% current_date %} between
           {{user.profile.full_name}}, residing at
           {{user.profile.address.formatted_address}}, contactable via phone at
           {{user.profile.phone}} and email at {{user.email}}, hereinafter
@@ -221,7 +223,7 @@
           >●<span style="font: 7pt 'Times New Roman'"
             >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </span></span
-        ><span lang="HU">Agreement Date:</span> {{utils.todays_date}}</span>
+        ><span lang="HU">Agreement Date:</span> {% current_date %}</span>
       </p>
 
       <p
@@ -445,7 +447,7 @@
           margin-left: 0in;
         "
       >
-	  {% include "signatures.html" %}
+      {% render_component "signatures.html" %}
       </p>
 
       <p class="MsoNormal"><span lang="HU">&nbsp;</span></p>
