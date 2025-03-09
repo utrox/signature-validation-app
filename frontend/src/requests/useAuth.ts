@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 const useAuth = () => {
   const fetchUserData = async () => {
     try {
-      const { data } = await axiosInstance.get("/auth/me/"); // Replace with your /me endpoint
+      const { data } = await axiosInstance.get("/auth/me/");
       
       return data; // If user is logged in, this will return user data
     } catch (error) {

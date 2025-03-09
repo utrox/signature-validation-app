@@ -21,7 +21,7 @@ const Page: React.FC<PageProps> = ({
     <>
       <PageTitle title={title} />
       {addNavbar && <Navbar />}
-      {children}
+      <main>{children}</main>
       {addFooter && <Footer />}
     </>
   );
