@@ -39,18 +39,18 @@ const RecordSignatures = () => {
     setSignatures([...signatures, signatureData]);
 
   const renderContent = () => {
+    if (user.is_signatures_recorded) {
+      return (
+        <Typography variant="h6" color="success" align="center">
+          You've already recorded your signatures.
+        </Typography>
+      );
+    }
     if (!PHYSICAL_SIGNATURE_PLACE || !showSignatures) {
       return (
         <Typography variant="h6" color="error" align="center">
           Please go to a terminal at a physical location to record your
           signatures.
-        </Typography>
-      );
-    }
-    if (user.is_signatures_recorded) {
-      return (
-        <Typography variant="h6" color="success" align="center">
-          You've already recorded your signatures.
         </Typography>
       );
     }
