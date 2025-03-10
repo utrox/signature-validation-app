@@ -3,13 +3,14 @@ from json.decoder import JSONDecodeError
 
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
+from rest_framework.views import exception_handler
 
 from .exceptions import CustomException
 
 
 logger = logging.getLogger(__name__)
 
-
+# TODO: edit exception handler to make it compatible with rest framework
 class CustomExceptionHandlerMiddleware:
     """
     Custom exception handler middleware, so that all exceptions are handled
