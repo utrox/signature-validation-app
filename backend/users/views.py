@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 
 from core.exceptions import (
     BadRequestException,
@@ -88,12 +89,10 @@ def register_view(request):
     return HttpResponse(status=201)
 
 
-# TODO: replace with actual data lmao
 def me_view(request):
     if not request.user.is_authenticated:
         return JsonResponse(None, safe=False)
 
     return JsonResponse({
-        "first_name": "Bence",
-        "is_signatures_recorded": True,
+        "is_signatures_recorded": len(request.user.signatures.all()) >= settings.REGISTRATION_SIGNATURES_COUNT,
     })

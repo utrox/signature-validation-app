@@ -47,7 +47,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'core.exceptions.exception_handler.CustomExceptionHandlerMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -56,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.exceptions.exception_handler.CustomExceptionHandlerMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -173,3 +173,7 @@ CORS_ALLOW_METHODS = [
 # Strict MIME type checking is enforced for module scripts per HTML spec.
 mimetypes.add_type("text/css", ".css", True)
 mimetypes.add_type("text/javascript", ".js", True)
+
+
+# How many signatures do users need to submit after registration.
+REGISTRATION_SIGNATURES_COUNT = 10
