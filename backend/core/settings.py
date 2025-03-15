@@ -33,6 +33,13 @@ ALLOWED_HOSTS = os.environ.get('APP_ALLOWED_HOSTS', 'localhost,127.0.0.1').split
 # Application definition
 
 INSTALLED_APPS = [
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.inlines",  # optional, if special inlines are needed
+    "unfold.contrib.import_export",  # optional, if django-import-export package is used
+    "unfold.contrib.guardian",  # optional, if django-guardian package is used
+    "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +51,7 @@ INSTALLED_APPS = [
     'users',
     'documents',
     'signatures',
+    'form_builder'
 ]
 
 MIDDLEWARE = [
@@ -55,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.exceptions.exception_handler.CustomExceptionHandlerMiddleware',
+    #TODO: revisit exception handling. 'core.exceptions.exception_handler.CustomExceptionHandlerMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -83,11 +91,19 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+import environ
+
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / ".env")
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env("DB_NAME"),
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWORD"),
+        'HOST': env("DB_HOST"),
+        'PORT': env("DB_PORT"),
     }
 }
 
@@ -127,6 +143,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'form_builder', 'static'),) 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
