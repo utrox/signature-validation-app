@@ -34,7 +34,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
   useEffect(() => {
     const initialFormValues = formData?.form?.form_fields?.reduce(
       // If we add defaultValue functionality on admin later: current.defaultValue || ""
-      (prev, current) => ({ ...prev, [current.label]: "" }), 
+      (prev, current) => ({ ...prev, [current.label]: "" }),
       {}
     );
     setFormValues(initialFormValues);
@@ -44,7 +44,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ formData, onSubmit }) => {
     <form onSubmit={handleSubmit}>
       {formData?.form?.form_fields?.map((field) => (
         <div key={field.id} style={{ marginBottom: "16px" }}>
-          <FieldRenderer field={field} onChange={handleChange} />
+          <FieldRenderer
+            field={field}
+            onChange={handleChange}
+            value={formValues[field.label]}
+          />
         </div>
       ))}
       <Button type="submit" variant="contained" color="primary">

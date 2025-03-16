@@ -19,9 +19,12 @@ import { FormInputValue, FormField } from "../../../types/dynamic_form";
 interface FieldProps {
   field: FormField;
   onChange: (label: string, value: FormInputValue) => void;
+  value: FormInputValue;
 }
 
-const DynamicTextField: React.FC<FieldProps> = ({ field, onChange }) => {
+type DynamicFieldType = React.FC<FieldProps>;
+
+const DynamicTextField: DynamicFieldType = ({ field, onChange, value }) => {
   return (
     <TextField
       type={field.field_type}
@@ -29,12 +32,13 @@ const DynamicTextField: React.FC<FieldProps> = ({ field, onChange }) => {
       required={field.required}
       helperText={field.tooltip}
       fullWidth
+      value={value}
       onChange={(e) => onChange(field.label, e.target.value)}
     />
   );
 };
 
-const DynamicChoiceField: React.FC<FieldProps> = ({ field, onChange }) => {
+const DynamicChoiceField: DynamicFieldType = ({ field, onChange, value }) => {
   return (
     <TextField
       select
@@ -42,6 +46,7 @@ const DynamicChoiceField: React.FC<FieldProps> = ({ field, onChange }) => {
       required={field.required}
       helperText={field.tooltip}
       fullWidth
+      value={value}
       onChange={(e) => onChange(field.label, e.target.value)}
     >
       {field.choices.map((choice, index) => (
@@ -53,12 +58,15 @@ const DynamicChoiceField: React.FC<FieldProps> = ({ field, onChange }) => {
   );
 };
 
-const DynamicCheckboxField: React.FC<FieldProps> = ({ field, onChange }) => {
+const DynamicCheckboxField: DynamicFieldType = ({ field, onChange, value }) => {
   return (
     <>
       <FormControlLabel
         control={
-          <Checkbox onChange={(e) => onChange(field.label, e.target.checked)} />
+          <Checkbox
+            checked={!!value}
+            onChange={(e) => onChange(field.label, e.target.checked)}
+          />
         }
         label={field.label}
       />
@@ -67,11 +75,14 @@ const DynamicCheckboxField: React.FC<FieldProps> = ({ field, onChange }) => {
   );
 };
 
-const DynamicRadioField: React.FC<FieldProps> = ({ field, onChange }) => {
+const DynamicRadioField: DynamicFieldType = ({ field, onChange, value }) => {
   return (
     <FormControl>
       <FormLabel>{field.label}</FormLabel>
-      <RadioGroup onChange={(e) => onChange(field.label, e.target.value)}>
+      <RadioGroup
+        onChange={(e) => onChange(field.label, e.target.value)}
+        value={value}
+      >
         {field.choices.map((choice, index) => (
           <FormControlLabel
             key={index}
@@ -86,7 +97,7 @@ const DynamicRadioField: React.FC<FieldProps> = ({ field, onChange }) => {
   );
 };
 
-const DynamicDateField: React.FC<FieldProps> = ({ field, onChange }) => {
+const DynamicDateField: DynamicFieldType = ({ field, onChange }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -100,7 +111,7 @@ const DynamicDateField: React.FC<FieldProps> = ({ field, onChange }) => {
   );
 };
 
-const DynamicTimeField: React.FC<FieldProps> = ({ field, onChange }) => {
+const DynamicTimeField: DynamicFieldType = ({ field, onChange }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimePicker
@@ -115,23 +126,35 @@ const DynamicTimeField: React.FC<FieldProps> = ({ field, onChange }) => {
   );
 };
 
-const FieldRenderer: React.FC<FieldProps> = ({ field, onChange }) => {
+const FieldRenderer: DynamicFieldType = ({ field, onChange, value = "" }) => {
   switch (field.field_type) {
     case "text":
     case "email":
     case "number":
     case "tel":
-      return <DynamicTextField field={field} onChange={onChange} />;
+      return (
+        <DynamicTextField field={field} onChange={onChange} value={value} />
+      );
     case "dropdown":
-      return <DynamicChoiceField field={field} onChange={onChange} />;
+      return (
+        <DynamicChoiceField field={field} onChange={onChange} value={value} />
+      );
     case "checkbox":
-      return <DynamicCheckboxField field={field} onChange={onChange} />;
+      return (
+        <DynamicCheckboxField field={field} onChange={onChange} value={value} />
+      );
     case "radio":
-      return <DynamicRadioField field={field} onChange={onChange} />;
+      return (
+        <DynamicRadioField field={field} onChange={onChange} value={value} />
+      );
     case "date":
-      return <DynamicDateField field={field} onChange={onChange} />;
+      return (
+        <DynamicDateField field={field} onChange={onChange} value={value} />
+      );
     case "time":
-      return <DynamicTimeField field={field} onChange={onChange} />;
+      return (
+        <DynamicTimeField field={field} onChange={onChange} value={value} />
+      );
     default:
       return null;
   }
