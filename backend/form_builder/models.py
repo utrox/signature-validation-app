@@ -5,7 +5,7 @@ from django.contrib.postgres.fields import ArrayField
 
 
 class DocumentForm(models.Model):
-    document = models.ForeignKey(Document, on_delete=models.CASCADE, related_name="form")
+    document = models.OneToOneField(Document, on_delete=models.CASCADE, related_name="form")
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -15,17 +15,19 @@ class DocumentForm(models.Model):
 class FormField(models.Model):
     FIELD_TYPES = [
         ('text', 'Text'),
-        ('number', 'Number'),
         ('email', 'Email'),
+        ('number', 'Number'),
         ('date', 'Date'),
+        ('time', 'Time'),
+        ('tel', 'Phone'),
         ('dropdown', 'Dropdown'),
         ('checkbox', 'Checkbox'),
-        ('file', 'File Upload'),
         ('radio', 'Radio Buttons')
     ]
-    form = models.OneToOneField(DocumentForm, on_delete=models.CASCADE, related_name="form_fields")
+    form = models.ForeignKey(DocumentForm, on_delete=models.CASCADE, related_name="form_fields")
     label = models.CharField(max_length=255)
     field_type = models.CharField(max_length=20, choices=FIELD_TYPES)
+    tooltip = models.CharField(max_length=255, default="", blank=True)
     required = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
     choices = ArrayField(
@@ -35,6 +37,14 @@ class FormField(models.Model):
     
     class Meta:
         ordering = ['order']
+    
+    def save(self, *args, **kwargs):
+        # If item was just created, set the order to the highest + 1, so 
+        # the new Field gets added to the end of the list automatically, instead of the middle.
+        if self.order == 0:
+            max_order = FormField.objects.filter(form=self.form).aggregate(models.Max('order'))['order__max']
+            self.order = (max_order or 0) + 1
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.label} ({self.get_field_type_display()})"

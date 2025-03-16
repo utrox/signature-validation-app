@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.contrib.postgres.fields import ArrayField
 
-from unfold.admin import ModelAdmin, TabularInline
+from unfold.admin import ModelAdmin, StackedInline
 from unfold.contrib.forms.widgets import ArrayWidget
 
 from .models import DocumentForm, FormField
 
 
-class FieldInline(TabularInline):
+class FieldInline(StackedInline):
     model = FormField
     extra = 0
     show_change_link = True
