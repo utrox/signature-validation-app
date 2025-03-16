@@ -1,8 +1,10 @@
-import React from "react";
 import Page from "../../components/Page";
-import useDocuments from "../../requests/useDocuments";
 import { Navigate, useParams } from "react-router-dom";
-import useAuth from "../../requests/useAuth";
+import { Container } from "@mui/material";
+
+import DynamicForm from "./DynamicForm";
+import useDocumentDetails from "../../requests/useDocumentDetails";
+import { FormState } from "../../types/dynamic_form";
 
 const SingleDocument = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,9 +13,29 @@ const SingleDocument = () => {
     return null;
   }
 
-  const { documents, isLoading } = useDocuments(id);
-  const document = documents && documents.length > 0 ? documents[0] : null;
-  return <Page title={document?.name}>{document?.name}</Page>;
+  const { document, isLoading } = useDocumentDetails(id);
+
+  if (!isLoading && !document) {
+    return <Navigate to="/documents" />;
+  }
+
+  const handleSubmitForm = (formData: FormState) => {
+    console.log(formData);
+  };
+
+  return (
+    <Page title={document?.name}>
+      <Container maxWidth="sm">
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          document && (
+            <DynamicForm formData={document} onSubmit={handleSubmitForm} />
+          )
+        )}
+      </Container>
+    </Page>
+  );
 };
 
 export default SingleDocument;

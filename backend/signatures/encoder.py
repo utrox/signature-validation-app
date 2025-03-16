@@ -1,11 +1,15 @@
+import sys
 from io import BytesIO
-# import tensorflow as tf
 import numpy as np
 import cv2
 from sklearn.metrics.pairwise import cosine_similarity
 from PIL import Image
 
-# MODEL = tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False, pooling='avg')
+# Only import tf when running the server, otherwise every other command
+# for example migrations we'd have to wait for the model to load. 
+if 'runserver' in sys.argv:
+    import tensorflow as tf
+    MODEL = tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False, pooling='avg')
 
 
 # Preprocess function for images

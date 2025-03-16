@@ -4,7 +4,9 @@ from .models import UserProfile, Address
 
 def generate_fake_phone_number():
     """
-    Generates a fake phone number in the format '+xx xxx xxxx'
+    Generates a fake phone number.
+    
+    Returns: Phone numberin the format '+xx xxx xxxx'
     """
     country_code = f"+{random.randint(1, 99)}"
     first_part = random.randint(100, 999)
@@ -12,7 +14,7 @@ def generate_fake_phone_number():
     return f"{country_code} {first_part} {second_part}"
 
 
-# TODO: refactor as class-method for UserProfile ?
+# TODO: refactor as class-method for UserProfile?
 def create_fake_profile() -> UserProfile:
     """
     Generates and creates (interpret: saves to the database)
@@ -41,8 +43,8 @@ def generate_fake_data():
     first_name = faker.first_name()
     last_name = faker.last_name()
     date_of_birth = faker.date_of_birth()
-    phone = faker.phone_number()
-    bank_account = faker.uuid4()
+    phone = generate_fake_phone_number()
+    bank_account = random.randint(10000000000000000000, 999999999999999999999)
 
     # Address
     address = faker.street_address()
