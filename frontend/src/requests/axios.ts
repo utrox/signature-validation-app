@@ -5,7 +5,8 @@ import { getCSRFToken } from "./csrf";
 // Create Axios instance
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
-  timeout: 5000,
+  // Wait 1 minute before timing out, to give the server a chance to process the signatures.
+  timeout: 60000,
   withCredentials: true,
 });
 
@@ -40,6 +41,8 @@ axiosInstance.interceptors.response.use(
       error.response.data.errors.forEach((err: { message: string }) => {
         toast.error(err.message);
       });
+    } else if (error?.response?.data) {
+      toast.error(error.response.data);
     } else {
       toast.error("There was an unhandled error. Please try again later.");
     }

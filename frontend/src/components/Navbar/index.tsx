@@ -22,6 +22,7 @@ const pages = [
   { name: "Documents", url: "/documents" },
   { name: "Sign", url: "/sign" },
   { name: "History", url: "/history" },
+  { name: "Demo", url: "/demo" },
 ];
 const settings = ["Account", "Logout"];
 

@@ -28,23 +28,45 @@ class SignatureSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid Base64-encoded image data.")
         return decoded_bytes
 
-    def create(self, validated_data):
+    def model_instance(self, validated_data=None):
+        """
+        Creates and returns a Signature model instance from the validated data.
+        This method processes the image data, extracts features, and creates a 
+        Signature instance with the provided user, image file, extracted features, 
+        and signature time.
+        Returns:
+            Signature: A Signature model instance populated with the user, image 
+                       file, extracted features, and signature time.
+        """
+        validated_data = validated_data or self.validated_data
         img_bytes = validated_data.pop('imgData')
         time_ms = validated_data.pop('signatureTimeMs')
 
-        # TODO: this is where feature extraction will happen.
+        # Preprocessing the image and feature extraction
         signature_img = encoder.preprocess_image(img_bytes)
         features = encoder.extract_features(signature_img)
-        features_pickle = pickle.dumps(features)
+        features_bytes: bytes = pickle.dumps(features)
 
         # Create a FileField from the base64 string
         file_name = f"signature_{uuid.uuid4()}.png"
         signature_file = ContentFile(img_bytes, name=file_name)
 
         # Save Signature instance
-        return Signature.objects.create(
+        return Signature(
             user=self.context['request'].user,
             file=signature_file,
-            features=features_pickle,
+            features=features_bytes,
             time_ms=time_ms
         )
+
+    def create(self, validated_data):
+        """
+        Create and save a new instance of the model with the given validated data.
+        Args:
+            validated_data (dict): The data that has been validated and is used to create the model instance.
+        Returns:
+            instance: The created and saved model instance.
+        """
+        instance = self.model_instance(validated_data)
+        instance.save()
+        return instance

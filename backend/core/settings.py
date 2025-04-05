@@ -48,10 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'users',
     'documents',
     'signatures',
-    'form_builder'
+    'form_builder',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #TODO: revisit exception handling. 'core.exceptions.exception_handler.CustomExceptionHandlerMiddleware',
+    'core.exceptions.exception_handler.CustomExceptionHandlerMiddleware', #TODO: revisit exception handling for REST API endpoints
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -195,3 +195,5 @@ mimetypes.add_type("text/javascript", ".js", True)
 
 # How many signatures do users need to submit after registration.
 REGISTRATION_SIGNATURES_COUNT = 10
+
+SIGNATURE_SIMILARITY_THRESHOLD = 0.85

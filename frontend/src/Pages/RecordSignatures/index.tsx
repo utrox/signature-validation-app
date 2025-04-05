@@ -15,7 +15,12 @@ const REGISTRATION_SIGNATURES_NEEDED = import.meta.env
 const RecordSignatures = () => {
   const [signatures, setSignatures] = useState<SignatureData[]>([]);
   const [showSignatures, setShowSignatures] = useState(true);
-  const { mutate: queryRegisterSignatures } = useRegisterSignatures();
+  const {
+    mutate: queryRegisterSignatures,
+    isSuccess,
+    isPending,
+    isError,
+  } = useRegisterSignatures();
 
   const { user } = useAuth();
 
@@ -60,11 +65,24 @@ const RecordSignatures = () => {
           You've submitted {signatures.length} signature(s) out of{" "}
           {REGISTRATION_SIGNATURES_NEEDED}.
         </Typography>
+        {isPending && (
+          <Typography>
+            Loading... Please wait, this might take up to a couple a minutes.
+          </Typography>
+        )}
+        {}
         {signatures.length < REGISTRATION_SIGNATURES_NEEDED ? (
           <SignatureCanvas onSave={addSignature} />
         ) : (
-          <Typography variant="h6" color="success" align="center">
-            You're done, bozo!
+          isSuccess && (
+            <Typography variant="h6" color="success" align="center">
+              You're done, bozo!
+            </Typography>
+          )
+        )}
+        {isError && (
+          <Typography variant="h6" color="error" align="center">
+            There was an error while saving your signatures. Please try again.
           </Typography>
         )}
       </>
