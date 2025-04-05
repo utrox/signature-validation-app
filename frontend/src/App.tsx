@@ -10,6 +10,7 @@ import PageTitle from "./components/Routing/PageTitle.tsx";
 import Documents from "./Pages/Documents/index.tsx";
 import SingleDocument from "./Pages/SingleDocument/index.tsx";
 import RecordSignatures from "./Pages/RecordSignatures/index.tsx";
+import DemoPage from "./Pages/Demo/index.tsx";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
 
           {/* Routes that redirect user to record signatures, if they did not already do that. */}
           <Route element={<ValidSignaturesNeededRoute />}>
+            <Route path="/demo" element={<DemoPage />} />
             <Route path="/documents" element={<Documents />} />
             <Route path="/documents/:id" element={<SingleDocument />} />
           </Route>

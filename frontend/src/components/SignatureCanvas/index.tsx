@@ -7,17 +7,35 @@ export interface SignatureCanvasProps {
 }
 
 export type SignatureData = {
-    imgData: string; // base64
-    signatureTimeMs: number; // How long the signature drawing took place
-  };
+  imgData: string; // base64
+  signatureTimeMs: number; // How long the signature drawing took place
+};
 
 const styles = {
   border: "0.0625rem solid #9c9c9c",
   borderRadius: "0.25rem",
 };
 
-const SignatureCanvas: React.FC<SignatureCanvasProps> = ({onSave}) => {
+const SignatureCanvas: React.FC<SignatureCanvasProps> = ({ onSave }) => {
   const canvasRef = useRef<ReactSketchCanvasRef>(null);
+
+  const save = async () => {
+    if (canvasRef.current) {
+      const base64String = await canvasRef.current.exportImage("png");
+      const signatureTime = await canvasRef.current.getSketchingTime();
+
+      console.log("Saving...");
+      onSave({
+        imgData: base64String,
+        signatureTimeMs: signatureTime,
+      });
+      canvasRef.current.resetCanvas();
+    }
+  };
+
+  const clearCanvas = () => {
+    if (canvasRef.current) canvasRef.current.resetCanvas();
+  };
 
   return (
     <>
@@ -31,29 +49,10 @@ const SignatureCanvas: React.FC<SignatureCanvasProps> = ({onSave}) => {
         withTimestamp
       />
 
-      <Button
-        color="primary"
-        onClick={async () => {
-          if (canvasRef.current) {
-            const base64String = await canvasRef.current.exportImage("png");
-            const signatureTime = await canvasRef.current.getSketchingTime();
-
-            onSave({
-              imgData: base64String,
-              signatureTimeMs: signatureTime,
-            });
-            canvasRef.current.resetCanvas();
-          }
-        }}
-      >
+      <Button color="primary" onClick={save}>
         Save
       </Button>
-      <Button
-        color="error"
-        onClick={() => {
-          if (canvasRef.current) canvasRef.current.resetCanvas();
-        }}
-      >
+      <Button color="error" onClick={clearCanvas}>
         Clear Board
       </Button>
     </>

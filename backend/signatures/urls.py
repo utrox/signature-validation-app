@@ -4,4 +4,5 @@ from . import views
 
 urlpatterns = [
     path("", views.RegisterSignatureView.as_view(), name="register_signature"),
+    path("demo-verify/", views.DemoVerifySignatureView.as_view(), name="demo_verification"),
 ]
