@@ -49,7 +49,7 @@ class UserProfile(models.Model):
         """ 
         stored_signatures = self.user.signatures.all()
         
-        # If the signature was drawn comparitevly much slower
+        # If the signature was drawn comparatively much slower
         # than the average of valid signatures, reject it immediately.
         # If we first check for time that means that:
         # 1.) we save computing power
@@ -59,7 +59,7 @@ class UserProfile(models.Model):
         
         if signature_time_ms > avg_time * 2:
             print("Too slow!")
-            return "Please sign your signature more dynamicly."
+            return "Please sign your signature more dynamically."
 
 
         failures = []

@@ -42,7 +42,7 @@ class SignatureSerializer(serializers.Serializer):
         img_bytes = validated_data.pop('imgData')
         time_ms = validated_data.pop('signatureTimeMs')
 
-        # Preporcessing the image and feature extraction
+        # Preprocessing the image and feature extraction
         signature_img = encoder.preprocess_image(img_bytes)
         features = encoder.extract_features(signature_img)
         features_bytes: bytes = pickle.dumps(features)
