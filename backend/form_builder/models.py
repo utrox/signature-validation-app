@@ -1,7 +1,6 @@
 from django.db import models
-
-from documents.models import Document
 from django.contrib.postgres.fields import ArrayField
+from documents.models import Document
 
 
 class DocumentForm(models.Model):
@@ -29,7 +28,9 @@ class FormField(models.Model):
     field_type = models.CharField(max_length=20, choices=FIELD_TYPES)
     tooltip = models.CharField(max_length=255, default="", blank=True)
     required = models.BooleanField(default=True)
-    order = models.PositiveIntegerField(default=0)
+    order = models.IntegerField(default=-1)
+    # TODO: writable only on the creation. this should not be modifiable.
+    field_id = models.CharField(max_length=255, blank=True)
     choices = ArrayField(
         models.CharField(max_length=255, null=False),
         blank=True, null=True
@@ -37,13 +38,15 @@ class FormField(models.Model):
     
     class Meta:
         ordering = ['order']
+        unique_together = ('form', 'field_id')
     
     def save(self, *args, **kwargs):
         # If item was just created, set the order to the highest + 1, so 
         # the new Field gets added to the end of the list automatically, instead of the middle.
-        if self.order == 0:
+        if self.order == -1:
             max_order = FormField.objects.filter(form=self.form).aggregate(models.Max('order'))['order__max']
             self.order = (max_order or 0) + 1
+
         super().save(*args, **kwargs)
 
     def __str__(self):

@@ -6,7 +6,7 @@ class FormFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = FormField
         ordering = ['order']
-        fields = ['id', 'label', 'tooltip', 'field_type', 'required', 'order', 'choices']
+        fields = ['id', 'label', 'tooltip', 'field_type', 'field_id', 'required', 'order', 'choices']
 
 
 class DocumentFormSerializer(serializers.ModelSerializer):

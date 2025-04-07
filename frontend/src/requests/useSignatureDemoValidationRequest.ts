@@ -12,7 +12,7 @@ const useSignatureDemoValidationRequest = () => {
   const mutation = useMutation({
     mutationFn: demoValidationRequest,
     onSuccess: () => {
-      toast.info("Your signature request has been processed!");
+      toast.success("Your signature request has been processed!");
     },
   });
 
