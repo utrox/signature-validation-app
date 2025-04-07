@@ -33,7 +33,7 @@ const DynamicTextField: DynamicFieldType = ({ field, onChange, value }) => {
       helperText={field.tooltip}
       fullWidth
       value={value}
-      onChange={(e) => onChange(field.label, e.target.value)}
+      onChange={(e) => onChange(field.field_id, e.target.value)}
     />
   );
 };
@@ -47,7 +47,7 @@ const DynamicChoiceField: DynamicFieldType = ({ field, onChange, value }) => {
       helperText={field.tooltip}
       fullWidth
       value={value}
-      onChange={(e) => onChange(field.label, e.target.value)}
+      onChange={(e) => onChange(field.field_id, e.target.value)}
     >
       {field.choices.map((choice, index) => (
         <MenuItem key={index} value={choice}>
@@ -75,12 +75,13 @@ const DynamicCheckboxField: DynamicFieldType = ({ field, onChange, value }) => {
   );
 };
 
+// TODO: solve checkboxes with multiple values?
 const DynamicRadioField: DynamicFieldType = ({ field, onChange, value }) => {
   return (
     <FormControl>
       <FormLabel>{field.label}</FormLabel>
       <RadioGroup
-        onChange={(e) => onChange(field.label, e.target.value)}
+        onChange={(e) => onChange(field.field_id, e.target.value)}
         value={value}
       >
         {field.choices.map((choice, index) => (
@@ -103,7 +104,7 @@ const DynamicDateField: DynamicFieldType = ({ field, onChange }) => {
       <DatePicker
         label={field.label}
         onChange={(date) =>
-          onChange(field.label, date ? date.format("YYYY-MM-DD") : "")
+          onChange(field.field_id, date ? date.format("YYYY-MM-DD") : "")
         }
       />
       <FormHelperText>{field.tooltip}</FormHelperText>
@@ -117,7 +118,7 @@ const DynamicTimeField: DynamicFieldType = ({ field, onChange }) => {
       <TimePicker
         label={field.label}
         onChange={(time) =>
-          onChange(field.label, time ? time.format("HH:mm") : "")
+          onChange(field.field_id, time ? time.format("HH:mm") : "")
         }
         ampm={false}
       />

@@ -1,0 +1,22 @@
+{% extends "admin/change_form.html" %} 
+{% load i18n unfold %} 
+
+{% block object-tools-items %}
+<li class="border md:last:rounded-r hover:text-primary-600 -ml-px dark:border-base-700 max-md:last:rounded-b md:first:rounded-l border-base-200 max-md:first:rounded-t">
+  <form id="preview-form" target="_blank" method="POST" action="{% url 'preview_doc' %}">
+    {% csrf_token %}
+    <input
+      type="hidden"
+      name="workflow_id"
+      value="{{ original.pk }}"
+    />
+    <button
+      type="submit"
+      class="bg-primary-900 cursor-pointer flex items-center gap-2 px-3 py-2 text-left whitespace-nowrap"
+    >
+      Preview Document
+    </button>
+  </form>
+</li>
+{{ block.super }} 
+{% endblock %}

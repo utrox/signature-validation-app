@@ -18,6 +18,7 @@ export type FormField = {
   label: string;
   tooltip: string;
   field_type: FieldTypes;
+  field_id: string;
   required: boolean;
   order: number;
   choices: string[];

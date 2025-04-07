@@ -1,0 +1,254 @@
+<!-- Generated with Word from a .docx file, that's why this is such a mess. -->
+
+{% load template_utils %}
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"Aptos Display";}
+@font-face
+	{font-family:Aptos;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:0in;
+	line-height:115%;
+	font-size:12.0pt;
+	font-family:"Aptos",sans-serif;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-top:8.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Aptos Display",sans-serif;
+	color:#0F4761;
+	font-weight:normal;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-top:8.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Aptos",sans-serif;
+	color:#0F4761;
+	font-weight:normal;}
+h4
+	{mso-style-link:"Heading 4 Char";
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:2.0pt;
+	margin-left:0in;
+	line-height:115%;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Aptos",sans-serif;
+	color:#0F4761;
+	font-weight:normal;
+	font-style:italic;}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:28.0pt;
+	font-family:"Aptos Display",sans-serif;
+	letter-spacing:-.5pt;}
+p.MsoTitleCxSpFirst, li.MsoTitleCxSpFirst, div.MsoTitleCxSpFirst
+	{mso-style-link:"Title Char";
+	margin:0in;
+	font-size:28.0pt;
+	font-family:"Aptos Display",sans-serif;
+	letter-spacing:-.5pt;}
+p.MsoTitleCxSpMiddle, li.MsoTitleCxSpMiddle, div.MsoTitleCxSpMiddle
+	{mso-style-link:"Title Char";
+	margin:0in;
+	font-size:28.0pt;
+	font-family:"Aptos Display",sans-serif;
+	letter-spacing:-.5pt;}
+p.MsoTitleCxSpLast, li.MsoTitleCxSpLast, div.MsoTitleCxSpLast
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:28.0pt;
+	font-family:"Aptos Display",sans-serif;
+	letter-spacing:-.5pt;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Aptos Display",sans-serif;
+	color:#0F4761;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:"Times New Roman",serif;
+	color:#0F4761;}
+span.Heading4Char
+	{mso-style-name:"Heading 4 Char";
+	mso-style-link:"Heading 4";
+	font-family:"Times New Roman",serif;
+	color:#0F4761;
+	font-style:italic;}
+span.TitleChar
+	{mso-style-name:"Title Char";
+	mso-style-link:Title;
+	font-family:"Aptos Display",sans-serif;
+	letter-spacing:-.5pt;}
+.MsoChpDefault
+	{font-size:12.0pt;
+	font-family:"Aptos",sans-serif;}
+.MsoPapDefault
+	{margin-bottom:8.0pt;
+	line-height:115%;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US style='word-wrap:break-word'>
+{% if preview %}
+{% render_component "preview_watermark.html" %}
+{% endif %}
+<div class=WordSection1>
+
+<p class=MsoTitle>Bank Account Agreement</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p>
+This agreement is made on {% current_date %} between
+{{user.profile.full_name}}, residing at
+{{user.profile.address.formatted_address}}, contactable via phone at
+{{user.profile.phone}} and email at {{user.email}}, hereinafter referred to as
+&quot;the Client&quot;, and Oh, TP Bank, hereinafter referred to as &quot;the
+Bank&quot;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h3>1. Account Information</h3>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><b>Account Holder Name</b>: {{user.profile.full_name}}</li>
+ <li class=MsoNormal><b>Account Type</b>: {{form_data.account_type}}</li>
+ <li class=MsoNormal><b>Currency Selection</b>: {{form_data.currency}}</li>
+ <li class=MsoNormal><b>Initial Deposit Amount</b>:
+     {{form_data.initial_deposit_amount}}</li>
+</ul>
+
+<h3>2. Account Services </h3>
+
+<h4>Upon the opening of the account, the following services will be available
+to the Customer, subject to availability and terms of the Bank:</h4>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><b>List of Additional Services</b> (Check all that apply):</li>
+</ul>
+
+<p class=MsoNormal style='text-indent:.5in'>{{form_data.additional_services}}</p>
+
+<h3>3. Customer Contact</h3>
+
+<p class=MsoNormal>Preferences The Customer may specify preferred
+communication methods for notifications and alerts, as follows:</p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><b>Preferred Callback Time</b>: {{form_data.callback_preferred_time}}</li>
+ <li class=MsoNormal><b>Email for Notifications</b>: {{form_data.notification_email}}
+     </li>
+ <li class=MsoNormal><b>Phone Number for Fraud Alerts</b>: {{form_data.notification_phone}}
+     </li>
+</ul>
+
+<h3>4. Account Usage and Terms</h3>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal>The Bank agrees to provide the Customer with the selected
+     account type and services, subject to the terms and conditions outlined in
+     the Bank's general banking policies.</li>
+ <li class=MsoNormal>The Customer agrees to deposit the specified initial
+     deposit amount into the account and maintain sufficient funds to cover
+     account-related fees, charges, and transactions.</li>
+ <li class=MsoNormal>The Bank may update or modify the account services
+     provided to the Customer at its discretion, with prior notice.</li>
+ <li class=MsoNormal>The Bank has the right to completely ignore this whole
+     contract, because they can afford expensive lawyers, and you will get the
+     shit sued out of you.</li>
+</ul>
+
+<h3>5. Fraud Prevention and Security</h3>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal>The Customer agrees to maintain the confidentiality of
+     their account information, including but not limited to passwords and
+     security codes.</li>
+ <li class=MsoNormal>The Bank will use the provided contact information for
+     notifications related to fraud alerts, account updates, and other critical
+     communications.</li>
+ <li class=MsoNormal>In case of suspected fraudulent activity, the Customer
+     agrees to notify the Bank immediately using the provided contact details.</li>
+</ul>
+
+<h3>6. Closing of Account</h3>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal>The Customer may request the closure of the account at any
+     time, subject to the Bank's policies regarding account closure and pending
+     transactions.</li>
+</ul>
+
+<h3>7. Governing Law and Dispute Resolution</h3>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal>This Agreement shall be governed by the laws of North
+     Korea.</li>
+ <li class=MsoNormal>Any disputes arising from this Agreement shall be resolved
+     through a coinflip in Madagascar.</li>
+</ul>
+
+<h3>8. Acknowledgment </h3>
+
+<p class=MsoNormal>By signing below, the Customer acknowledges and agrees to
+the terms of this Agreement, including the terms and conditions set forth by
+the Bank.</p>
+
+
+{% render_component "signatures.html" %}
+
+
+</div>
+
+</body>
+
+</html>

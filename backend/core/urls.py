@@ -24,6 +24,7 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('api/documents/', include('documents.urls')),
     path('api/signatures/', include('signatures.urls')),
+    path('api/workflows/', include('signature_workflows.urls')),
 ]
 
 # Used for serving static files in a development environment.

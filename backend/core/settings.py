@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'documents',
     'signatures',
+    'signature_workflows',
     'form_builder',
     'users',
 ]
