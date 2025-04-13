@@ -12,11 +12,16 @@ const useDocumentDetails = (id: string) => {
     }
   };
 
-  const { data: document, isLoading, error } = useQuery<DocumentData | null>({
-    queryKey: ["document"],
+  const {
+    data: document,
+    isLoading,
+    error,
+  } = useQuery<DocumentData | null>({
+    queryKey: ["document", id],
     queryFn: fetchDocumentDetails,
     staleTime: 300000, // Cache for 5 minutes
     retry: 1,
+    refetchOnMount: true,
   });
 
   return { document, isLoading, error };
