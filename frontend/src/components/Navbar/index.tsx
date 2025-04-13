@@ -20,10 +20,10 @@ import { useNavigate } from "react-router-dom";
 
 const pages = [
   { name: "Documents", url: "/documents" },
-  { name: "Sign", url: "/sign" },
-  { name: "History", url: "/history" },
+  { name: "My submissions", url: "/workflows" },
   { name: "Demo", url: "/demo" },
 ];
+
 const settings = ["Account", "Logout"];
 
 // TODO: do we need the avatar menu on the right? Should it be removed along with the
@@ -49,7 +49,6 @@ function Navbar() {
 
   return (
     <>
-      {/* TODO: navigation hrefs */}
       <AppBar position="static" sx={{ marginBottom: 4 }}>
         <Toolbar>
           <NavIcon />

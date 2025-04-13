@@ -100,7 +100,7 @@ const DynamicRadioField: DynamicFieldType = ({ field, onChange, value }) => {
 
 const DynamicDateField: DynamicFieldType = ({ field, onChange }) => {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="zh-cn">
       <DatePicker
         label={field.label}
         onChange={(date) =>

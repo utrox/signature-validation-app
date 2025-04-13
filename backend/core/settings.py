@@ -37,8 +37,6 @@ INSTALLED_APPS = [
     "unfold.contrib.filters",  # optional, if special filters are needed
     "unfold.contrib.forms",  # optional, if special form elements are needed
     "unfold.contrib.inlines",  # optional, if special inlines are needed
-    "unfold.contrib.import_export",  # optional, if django-import-export package is used
-    "unfold.contrib.guardian",  # optional, if django-guardian package is used
     "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
     'corsheaders',
     'django.contrib.admin',
@@ -48,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'simple_history',
     'documents',
     'signatures',
     'signature_workflows',
@@ -198,3 +197,4 @@ mimetypes.add_type("text/javascript", ".js", True)
 REGISTRATION_SIGNATURES_COUNT = 10
 
 SIGNATURE_SIMILARITY_THRESHOLD = 0.85
+MAX_REJECTED_SIGNATURES = 5

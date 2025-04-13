@@ -72,6 +72,9 @@ class UserProfile(models.Model):
         print("Failed: ", failures)
         if len(failures) > 1:
             return "Signature does not match your valid signatures."
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Address(models.Model):

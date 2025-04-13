@@ -4,6 +4,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED
 
+from core.exceptions.exceptions import BadRequestException
 from .serializers import SignatureSerializer
 
 
@@ -42,5 +43,5 @@ class DemoVerifySignatureView(APIView):
         # Compare with users' signatures
         errors = request.user.profile.verify_signature(serializer.model_instance())
         if errors:
-            return Response(errors, status=400)
+            return BadRequestException(errors)
         return Response({"message": "Signature verified!"})
