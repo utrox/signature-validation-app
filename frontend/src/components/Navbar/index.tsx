@@ -17,23 +17,28 @@ import AppIcon from "../AppIcon";
 import NavDrawer from "./NavDrawer";
 import NavIcon from "./NavIcon";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../requests/useAuth";
 
-const pages = [
+const navPages = [
   { name: "Documents", url: "/documents" },
   { name: "My submissions", url: "/workflows" },
   { name: "Demo", url: "/demo" },
 ];
 
-const settings = ["Account", "Logout"];
+const loginPages = [
+  { name: "Login", url: "/login" },
+  { name: "Register", url: "/register" },
+];
 
-// TODO: do we need the avatar menu on the right? Should it be removed along with the
-// avatar, and moved into the left-side menu?
-function Navbar() {
+const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState<boolean>(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const { user, logout } = useAuth();
+  const pages = user ? navPages : loginPages;
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -77,37 +82,49 @@ function Navbar() {
             ))}
           </Box>
           {/* User icon button */}
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
+          {user && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    navigate("/account");
+                  }}
+                >
+                  <Typography sx={{ textAlign: "center" }}>Account</Typography>
                 </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    logout();
+                    window.location.href = "/";
+                  }}
+                >
+                  <Typography sx={{ textAlign: "center" }}>Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
       <NavDrawer
@@ -117,5 +134,5 @@ function Navbar() {
       />
     </>
   );
-}
+};
 export default Navbar;

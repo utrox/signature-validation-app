@@ -24,7 +24,16 @@ const useAuth = () => {
     retry: 1, // Only retry once on failure
   });
 
-  return { user, isLoading, error, refetch };
+  const logout = async () => {
+    try {
+      await axiosInstance.post("/auth/logout/");
+      await refetch(); // clear user info
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  return { user, isLoading, error, refetch, logout };
 };
 
 export default useAuth;
