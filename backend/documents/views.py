@@ -2,8 +2,8 @@ import json
 
 from rest_framework import generics, mixins
 from rest_framework.views import APIView
-from rest_framework.response import Response
 
+from core.exceptions.exceptions import NotFoundException, BadRequestException
 from signature_workflows.models import SignatureWorkflow
 from .models import Document
 from .serializers import DocumentDetailsSerializer, DocumentListSerializer
@@ -43,7 +43,7 @@ class DocumentGeneratorView(APIView):
                 workflow = SignatureWorkflow.objects.get(id=workflow_id)
                 document_id = workflow.document.id
             except (Document.DoesNotExist, SignatureWorkflow.DoesNotExist):
-                return Response({"error": "Document not found"}, status=404)
+                raise NotFoundException("Document not found.")
             
             context = {
                 "user": workflow.user,
@@ -52,7 +52,7 @@ class DocumentGeneratorView(APIView):
             }
         elif document_id:
             if len(Document.objects.filter(is_active=True, id=document_id)) == 0:
-                return Response({"error": "Document not found"}, status=404)
+                raise NotFoundException("Document not found.")
             
             form_data = request.data.get("form_data", {})
 
@@ -61,9 +61,9 @@ class DocumentGeneratorView(APIView):
                 try:
                     form_data = json.loads(form_data)
                 except json.JSONDecodeError:
-                    return Response({"error": "Invalid JSON format for form_data"}, status=400)
+                    raise BadRequestException("Invalid JSON format for form_data.")
             elif not isinstance(form_data, dict):
-                return Response({"error": "form_data must be a dictionary or JSON."}, status=400)
+                raise BadRequestException("form_data must be a dictionary or JSON.")
             
             context = {
                 "user": request.user,
@@ -71,7 +71,7 @@ class DocumentGeneratorView(APIView):
                 "preview": True
             }
         else:
-            return Response({"error": "Either document_id or workflow_id is required"}, status=400)
+            raise BadRequestException("Either document_id or workflow_id is required.")
         
         return generate_pdf_response(document_id, context)
     

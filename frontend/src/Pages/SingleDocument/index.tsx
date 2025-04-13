@@ -16,11 +16,8 @@ const SingleDocument = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const {
-    isSuccess,
-    data,
-    mutate: submitSignatureWorkflow,
-  } = useSubmitSignatureWorkflow();
+  const { isSuccess, mutate: submitSignatureWorkflow } =
+    useSubmitSignatureWorkflow();
 
   if (!id) {
     window.location.href = "/documents";
@@ -36,7 +33,7 @@ const SingleDocument = () => {
   // Redirect user to see their created workflow after submission (if successful)
   useEffect(() => {
     if (isSuccess) {
-      navigate(`/workflows/${data.id}`);
+      navigate(`/workflows`);
     }
   }, [isSuccess, navigate]);
 

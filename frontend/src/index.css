@@ -37,3 +37,7 @@ body {
 main {
     min-height: 50dvh;
 }
+
+.css-u8yr1p-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon {
+  color: white;
+}

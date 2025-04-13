@@ -1,10 +1,11 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
+from simple_history.admin import SimpleHistoryAdmin
 
 from .models import SignatureWorkflow
 
 
-class SignatureWorkflowAdmin(ModelAdmin):
+class SignatureWorkflowAdmin(ModelAdmin, SimpleHistoryAdmin):
     list_display = ("document", "user", "created_at", "status")
     list_filter = ("created_at", "updated_at", "status")
     search_fields = ("document__name", "user__username")
