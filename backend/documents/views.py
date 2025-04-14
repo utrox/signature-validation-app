@@ -1,27 +1,30 @@
 import json
 
+from django.http import FileResponse
 from rest_framework import generics, mixins
 from rest_framework.views import APIView
 
 from core.exceptions.exceptions import NotFoundException, BadRequestException
-from signature_workflows.models import SignatureWorkflow
+from signature_workflows.models import SignatureWorkflow, WorkflowStatus
 from .models import Document
 from .serializers import DocumentDetailsSerializer, DocumentListSerializer
 from .generator import generate_pdf_response
 
 
 class DocumentGeneratorView(APIView):
-    # TODO permission class to only allow users, not admins to visit. or for admins, use fake data.
+    # TODO permission class to only allow users, not admins to visit. 
     # TODO: windows installation is dummy stupid: https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
-    # write about it in readme docs and figure out CI.
+    # write about it in readme docs and figure out CI.   
     def post(self, request):
         """
         Handles the POST request to generate a document preview.
         This method generates a preview of a document based on the provided data.
         It supports two scenarios:
         1. Generating a preview before submitting the form data (using `document_id` and `form_data`).
-        2. Generating a preview for an existing workflow instance (using `workflow_id`). In this case, 
+        2. Generating a preview for an existing but not yet signed workflow instance (using `workflow_id`). In this case, 
             the form_data is read from the workflow instance.
+        3. Getting the preview for an existing and signed document. Documents get stored on the disk after signing.
+            We read that previously generated PDF document from file, and return it. 
         Args:
             request (Request): The HTTP request object containing the data.
                 Should contain either `document_id` or `workflow_id` in the request body.
@@ -37,44 +40,69 @@ class DocumentGeneratorView(APIView):
         # before signing it for example.
         workflow_id = request.data.get("workflow_id", None)
         document_id = request.data.get("document_id", None)
-        
-        if workflow_id: 
-            try:
-                workflow = SignatureWorkflow.objects.get(id=workflow_id)
-                document_id = workflow.document.id
-            except (Document.DoesNotExist, SignatureWorkflow.DoesNotExist):
-                raise NotFoundException("Document not found.")
-            
-            context = {
-                "user": workflow.user,
-                "form_data": workflow.form_data,
-                "preview": True
-            }
-        elif document_id:
-            if len(Document.objects.filter(is_active=True, id=document_id)) == 0:
-                raise NotFoundException("Document not found.")
-            
-            form_data = request.data.get("form_data", {})
 
-            # Check for formdata validity.
-            if isinstance(form_data, str):
-                try:
-                    form_data = json.loads(form_data)
-                except json.JSONDecodeError:
-                    raise BadRequestException("Invalid JSON format for form_data.")
-            elif not isinstance(form_data, dict):
-                raise BadRequestException("form_data must be a dictionary or JSON.")
-            
-            context = {
-                "user": request.user,
-                "form_data": form_data,
-                "preview": True
-            }
+        if document_id:
+            return self._handle_form_preview(document_id, request)
+        elif workflow_id:
+            return self._handle_workflow_preview(workflow_id)
         else:
             raise BadRequestException("Either document_id or workflow_id is required.")
+
+    def _handle_form_preview(self, document_id, request):
+        """
+        Generating a preview before submitting the form data (using `document_id` and `form_data`).
+        """
+        if Document.objects.filter(is_active=True, id=document_id).exists():
+            raise NotFoundException("Document not found.")
         
+        form_data = request.data.get("form_data", {})
+
+        # Check for formdata validity.
+        if isinstance(form_data, str):
+            try:
+                form_data = json.loads(form_data)
+            except json.JSONDecodeError:
+                raise BadRequestException("Invalid JSON format for form_data.")
+        elif not isinstance(form_data, dict):
+            raise BadRequestException("form_data must be a dictionary or JSON.")
+        
+        context = {
+            "user": request.user,
+            "form_data": form_data,
+            "preview": True
+        }
         return generate_pdf_response(document_id, context)
     
+    def _handle_workflow_preview(self, workflow_id):
+        """
+        Generating a preview for an existing but not yet signed workflow instance (using `workflow_id`).
+        In this case, the form_data is read from the workflow instance.
+        """
+        try:
+            workflow = SignatureWorkflow.objects.get(id=workflow_id)
+            document_id = workflow.document.id
+            if workflow.status == WorkflowStatus.ACCEPTED:
+                return self._get_pdf_from_file(workflow)
+        except (Document.DoesNotExist, SignatureWorkflow.DoesNotExist):
+            raise NotFoundException("Document not found.")
+        
+        context = {
+            "user": workflow.user,
+            "form_data": workflow.form_data,
+            "preview": True
+        }
+
+        return generate_pdf_response(document_id, context)
+    
+    def _get_pdf_from_file(self, workflow):
+        """
+        Generating a preview for an existing and signed document.
+        Documents get stored on the disk after signing, so we read that previously generated PDF document from file, and return it.
+        """
+        if not workflow.document_file:
+            raise BadRequestException("Signed document not found for this workflow.")
+        return FileResponse(workflow.document_file.open('rb'), content_type='application/pdf')
+
 
 class DocumentListView(generics.GenericAPIView, mixins.ListModelMixin):
     queryset = Document.objects.filter(is_active=True)  # Only active documents

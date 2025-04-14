@@ -7,6 +7,7 @@ import { WORKFLOW_STATUSES, WorkflowData, WorkflowHistory } from "./types";
 import HistoryModal from "./HistoryModal";
 import useDeleteWorkflow from "../../requests/useDeleteWorkflow";
 import SignatureModal from "./SignatureModal";
+import PreviewWorkflowButton from "./PreviewWorkflowButton";
 
 const IS_PHYSICAL_PLACE = import.meta.env.VITE_PHYSICAL_PLACE === "true";
 
@@ -64,6 +65,7 @@ const ResultsMobileCards = ({ filtered }: { filtered: WorkflowData[] }) => {
                 marginLeft: "auto",
                 gridColumn: "span 2",
                 display: "flex",
+                flexWrap: "wrap",
                 gap: 1,
               }}
             >
@@ -71,7 +73,7 @@ const ResultsMobileCards = ({ filtered }: { filtered: WorkflowData[] }) => {
               {wf.status === "accepted_by_clerk" && IS_PHYSICAL_PLACE && (
                 <Button
                   variant="outlined"
-                  color="secondary"
+                  color="success"
                   size="small"
                   sx={{ mr: 1 }}
                   onClick={() => setSelectedWorkflow(wf)}
@@ -93,6 +95,7 @@ const ResultsMobileCards = ({ filtered }: { filtered: WorkflowData[] }) => {
                   Delete
                 </Button>
               )}
+              <PreviewWorkflowButton workflow={wf} />
               <Button
                 variant="outlined"
                 color="primary"

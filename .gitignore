@@ -171,3 +171,4 @@ cython_debug/
 .pypirc
 staticfiles
 uploads
+completed_documents

@@ -1,14 +1,16 @@
+from datetime import datetime
+from django.core.files.base import ContentFile
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
 
 from core.exceptions.exceptions import BadRequestException, NotFoundException
+from documents.generator import generate_pdf
 from documents.models import Document
 from signatures.serializers import SignatureSerializer
-from signature_workflows.constants import WorkflowStatus
 from .models import SignatureWorkflow
-from .constants import INCORRECT_WORKFLOW_STATE_ERROR_MESSAGES
+from .constants import WorkflowStatus, INCORRECT_WORKFLOW_STATE_ERROR_MESSAGES
 
 
 class SignatureWorkflowCreateSerializer(serializers.ModelSerializer):
@@ -109,7 +111,6 @@ class SignatureVerificationSerializer(serializers.Serializer):
     def save(self):
         user = self.context["request"].user
         workflow = self.workflow
-
         errors = user.profile.verify_signature(self.signature_instance)
 
         if errors:
@@ -119,8 +120,21 @@ class SignatureVerificationSerializer(serializers.Serializer):
             workflow.save()
             raise BadRequestException(errors)
 
+        # Generate PDF with the signature, and save it to disk.
+        context = {
+            "user": workflow.user,
+            "form_data": workflow.form_data,
+            "preview": False,
+            "signature_base64": self.data["signature_data"]["imgData"],
+        }
+        generated_pdf: bytes = generate_pdf(workflow.document.id, context)
+
         workflow.status = WorkflowStatus.ACCEPTED
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_name = f"{workflow.document.name}_{workflow.user.username}_{timestamp}.pdf"
+        workflow.document_file.save(file_name, ContentFile(generated_pdf))  # ✅ Save correctly
         workflow.save()
+
         return workflow
 
 
