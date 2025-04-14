@@ -29,6 +29,8 @@ const SignatureModal: React.FC<SignatureModalProps> = ({
   const {
     mutate: querySubmitDocumentSignature,
     isPending,
+    isSuccess,
+    isError,
   } = useSubmitSignatureForWorkflow();
   const [signature, setSignature] = useState<SignatureData | null>(null);
   const [showSignatures, setShowSignatures] = useState(true);
@@ -49,9 +51,12 @@ const SignatureModal: React.FC<SignatureModalProps> = ({
   useEffect(() => {
     if (signature) {
       querySubmitDocumentSignature({ signature, workflowId });
-      onClose();
     }
   }, [signature]);
+
+  useEffect(() => {
+    if (isSuccess || isError) onClose();
+  }, [isSuccess, isError]);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>

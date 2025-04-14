@@ -1,17 +1,20 @@
 import pickle
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from django.core.files.storage import FileSystemStorage
 from . import encoder
 
 User = get_user_model()
 
+PrivateStorage = FileSystemStorage(
+    location="uploads/signature_files/",
+)
 
 class Signature(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="signatures")
     # In a production environment I'd consider leaving this field out.
     # For the demo purposes though, we will have it.
-    file = models.FileField(upload_to='uploads/signature_files/')
+    file = models.FileField(upload_to="", storage=PrivateStorage)
     features = models.BinaryField() 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

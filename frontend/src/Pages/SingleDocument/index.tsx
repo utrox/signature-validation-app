@@ -11,6 +11,7 @@ import useSubmitSignatureWorkflow from "../../requests/useSubmitSignatureWorkflo
 import { useEffect } from "react";
 import { getCSRFToken } from "../../requests/csrf";
 import { toast } from "react-toastify";
+import { addHiddenField } from "../../utils";
 
 const SingleDocument = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,7 +46,6 @@ const SingleDocument = () => {
   };
 
   // We're doing it this way, because we want to open a new tab with the preview.
-  // TODO: We could (should) also use a modal, but that's a Future Me problem.
   const handlePreviewForm = (formData: FormState) => {
     const form = document.createElement("form");
     form.style.display = "none";
@@ -67,18 +67,6 @@ const SingleDocument = () => {
     } else {
       toast.warn("CSRF token not found. Please log in again.");
     }
-  };
-
-  const addHiddenField = (
-    form: HTMLFormElement,
-    name: string,
-    value: string
-  ) => {
-    const formDataField = document.createElement("input");
-    formDataField.type = "hidden";
-    formDataField.name = name;
-    formDataField.value = value;
-    form.appendChild(formDataField);
   };
 
   return (

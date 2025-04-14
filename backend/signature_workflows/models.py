@@ -34,6 +34,11 @@ class SignatureWorkflow(models.Model):
     )
     rejected_signatures = models.IntegerField(default=0)
     form_data = models.JSONField(default=dict, encoder=PrettyJSONEncoder)
+    document_file = models.FileField(
+        upload_to='completed_documents/',
+        null=True,
+        blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
