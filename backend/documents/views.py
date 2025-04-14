@@ -52,7 +52,7 @@ class DocumentGeneratorView(APIView):
         """
         Generating a preview before submitting the form data (using `document_id` and `form_data`).
         """
-        if Document.objects.filter(is_active=True, id=document_id).exists():
+        if not Document.objects.filter(is_active=True, id=document_id).exists():
             raise NotFoundException("Document not found.")
         
         form_data = request.data.get("form_data", {})
