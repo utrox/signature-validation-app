@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'signature_workflows',
     'form_builder',
     'users',
+    'authentication'
 ]
 
 MIDDLEWARE = [

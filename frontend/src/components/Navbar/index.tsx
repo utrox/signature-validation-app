@@ -108,7 +108,7 @@ const Navbar: React.FC = () => {
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();
-                    navigate("/account");
+                    navigate("/profile");
                   }}
                 >
                   <Typography sx={{ textAlign: "center" }}>Account</Typography>
