@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.db import transaction
+
 from rest_framework.views import APIView
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -22,8 +24,12 @@ class RegisterSignatureView(APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
-        serializer.save()
-
+        try:
+            with transaction.atomic():
+                serializer.save()
+        except Exception as e:
+            raise BadRequestException(f"Failed to save signatures. Please try again later, service might be down.")
+        
         return Response(
             {"message": "Signatures registered successfully"},
             status=HTTP_201_CREATED

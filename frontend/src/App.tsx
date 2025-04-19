@@ -11,6 +11,7 @@ import SingleDocument from "./Pages/SingleDocument/index.tsx";
 import RecordSignatures from "./Pages/RecordSignatures/index.tsx";
 import DemoPage from "./Pages/Demo/index.tsx";
 import WorkflowsPage from "./Pages/Workflows/index.tsx";
+import ProfilePage from "./Pages/Profile/index.tsx";
 
 function App() {
   return (
@@ -22,9 +23,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Routes protected with authentication + signatures recorded */}
+        {/* Routes protected with authentication only, no recorded signatures. */}
         <Route element={<PrivateRoute />}>
           <Route path="/record-signatures" element={<RecordSignatures />} />
+          <Route path="/profile" element={<ProfilePage />} />
 
           {/* Routes that redirect user to record signatures, if they did not already do that. */}
           <Route element={<ValidSignaturesNeededRoute />}>

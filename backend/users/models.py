@@ -7,9 +7,19 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     profile = models.OneToOneField('UserProfile', on_delete=models.CASCADE, verbose_name="user", blank=True, null=True)
 
+    def create_fake_profile(self):
+        """
+        Creates a fake profile for the user if it doesn't exist.
+        This is useful for non-staff users who need a profile to function.
+        """
+        if not self.profile:
+            from .fake_data import FakeDataGenerator
+            self.profile = FakeDataGenerator().create_fake_profile()
+            self.save()
+
     def save(self, *args, **kwargs):
         if not self.profile and not self.is_staff:
-            raise ValidationError("Non-staff user cannot exist without Profile data.")
+            self.create_fake_profile()
         super().save(*args, **kwargs)
 
 
