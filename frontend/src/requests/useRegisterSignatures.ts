@@ -12,7 +12,7 @@ const useRegisterSignatures = () => {
   const mutation = useMutation({
     mutationFn: registerSignature,
     onSuccess: () => {
-      toast.info("Signatures successfully recorded!");
+      toast.success("Signatures successfully recorded!");
     },
   });
 

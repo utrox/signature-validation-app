@@ -1,3 +1,3 @@
-import { Draw } from "@mui/icons-material";
+import { DrawOutlined } from "@mui/icons-material";
 
-export default Draw;
+export default DrawOutlined;

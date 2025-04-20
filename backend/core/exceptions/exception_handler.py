@@ -14,10 +14,9 @@ logger = logging.getLogger(__name__)
 class CustomExceptionHandlerMiddleware:
     """
     Custom exception handler middleware, so that all exceptions are handled
-    uniformly and similarly to graphQL errors.
-    Also, added logging for the exceptions.
+    uniformly. Also, added logging for the exceptions.
     """
-    def __init__(self, get_response):
+    def __init__(self, get_response, *args, **kwargs):
         self.get_response = get_response
 
     def __call__(self, request):
@@ -52,9 +51,8 @@ class CustomExceptionHandlerMiddleware:
         }
 
     def process_exception(self, _, exception):
-        # Match the response format to the default graphQL error,
-        # so that it's easier to handle on the frontend.
-        logger.error(exception, exc_info=True)
+        logger.error(f"Handled exception: {exception}", exc_info=True)
+
         if isinstance(exception, CustomException):
             response_data = self._process_custom_exception(exception)
         else:

@@ -1,11 +1,20 @@
-import "./auth.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import {
+  TextField,
+  Button,
+  Box,
+  Paper,
+  Typography,
+  CircularProgress,
+  Container,
+} from "@mui/material";
 
 import useAuth from "../../requests/useAuth";
-import PageTitle from "../../components/Routing/PageTitle";
 import axiosInstance from "../../requests/axios";
+import Page from "../../components/Page";
+import WelcomeText from "./WelcomeText";
 
 export const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -13,11 +22,7 @@ export const Login = () => {
   const [password, setPassword] = useState("");
   const { user } = useAuth();
 
-  // Redirect to home if user is already logged in
-  // const { user } = useAuth();
   if (user) {
-    // Use window.location.href to redirect,
-    // so it reloads the whole app and fetches the user data again.
     window.location.href = "/";
   }
 
@@ -25,58 +30,87 @@ export const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    await axiosInstance
-      .post(`/auth/login/`, {
+    try {
+      await axiosInstance.post(`/auth/login/`, {
         username,
         password,
-      })
-      .then(() => {
-        toast.info("Login successful.");
-        window.location.href = "/";
-      })
-      .finally(() => setLoading(false));
+      });
+      toast.info("Login successful.");
+      window.location.href = "/";
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="login">
-      <PageTitle title="Login" />
-      <div className="card">
-        <div className="login-leftSide side">
-          <h1>
-            Welcome to <span id="logo">TODO name app</span>
-          </h1>
-          <p>
-            Don't worry, you only need to provide a username, email and
-            password. We'll take care of the rest, automatically generating
-            dummy data so you can test this demo.
-          </p>
-          <p>If you don't have an account, create one!</p>
-          <div>
-            <Link to="/register">
-              <button>Register</button>
-            </Link>
-          </div>
-        </div>
-        <div className="login-rightSide side">
-          <h1>Login</h1>
-          <form>
-            <input
-              type="text"
-              placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {/* TODO: better loading component */}
-            <button onClick={handleLogin}>
-              {loading ? "Loading..." : "Login"}
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
+    <Page title="Login">
+      <Container maxWidth="md">
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              sm: "row",
+            },
+            gap: 4,
+          }}
+        >
+          <Box
+            flex={1}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+          >
+            <WelcomeText />
+            <Typography variant="body2">
+              If you don't have an account, create one!
+            </Typography>
+            <Button
+              variant="outlined"
+              component={Link}
+              to="/register"
+              sx={{ mt: 2, width: "fit-content" }}
+            >
+              Register
+            </Button>
+          </Box>
+          <Box flex={1}>
+            <Typography variant="h5" gutterBottom>
+              Login
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleLogin}
+              display="flex"
+              flexDirection="column"
+              gap={2}
+            >
+              <TextField
+                label="Username"
+                variant="outlined"
+                fullWidth
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <TextField
+                label="Password"
+                variant="outlined"
+                type="password"
+                fullWidth
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Button type="submit" variant="contained" disabled={loading}>
+                {loading ? <CircularProgress size={24} /> : "Login"}
+              </Button>
+            </Box>
+          </Box>
+        </Paper>
+      </Container>
+    </Page>
   );
 };
+
+export default Login;

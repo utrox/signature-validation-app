@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 
 import Page from "../../components/Page";
 import SignatureCanvas, {
@@ -6,6 +6,7 @@ import SignatureCanvas, {
 } from "../../components/SignatureCanvas";
 import useSignatureDemoValidationRequest from "../../requests/useSignatureDemoValidationRequest";
 import { isAxiosError } from "axios"; // make sure you import this
+import DemoPageInstuctions from "./DemoPageInstuctions";
 
 const DemoPage = () => {
   const {
@@ -22,26 +23,31 @@ const DemoPage = () => {
 
   return (
     <Page title="Demo">
-      <Container>
-        <h1>Demo Page</h1>
-
-        {isPending ? (
-          <p>Loading...</p>
-        ) : (
-          <SignatureCanvas onSave={addSignature} />
-        )}
+      <Container maxWidth="md">
+        <Typography variant="h4" gutterBottom>
+          Demo Page
+        </Typography>
+        <DemoPageInstuctions />
+        <SignatureCanvas onSave={addSignature} isLoading={isPending} />
 
         {isSuccess && (
-          <p>
+          <Typography variant="h6" color="success" align="center">
             Congratulations! Your signature is either valid, or you're good at
             forging signatures.
-          </p>
+          </Typography>
         )}
 
         {error && (
-          <p style={{ color: "red" }}>
-            Error: {isAxiosError(error) && error?.response ? error.response.data : "There was an unexpected error. Please try again."}
-          </p>
+          <Typography variant="h6" color="error" align="center">
+            Error:{" "}
+            {isAxiosError(error) && error?.response
+              ? (
+                  error.response.data as { errors?: { message: string }[] }
+                ).errors
+                  ?.map((e) => e.message)
+                  .join(", ")
+              : "There was an unexpected error. Please try again."}
+          </Typography>
         )}
       </Container>
     </Page>

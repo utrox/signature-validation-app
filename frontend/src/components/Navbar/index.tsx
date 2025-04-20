@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import AppIcon from "../AppIcon";
 import NavDrawer from "./NavDrawer";
 import NavIcon from "./NavIcon";
 import { useNavigate } from "react-router-dom";
@@ -69,7 +68,6 @@ const Navbar: React.FC = () => {
               <MenuIcon />
             </IconButton>
           </Box>
-          <AppIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -117,7 +115,6 @@ const Navbar: React.FC = () => {
                   onClick={() => {
                     handleCloseUserMenu();
                     logout();
-                    window.location.href = "/";
                   }}
                 >
                   <Typography sx={{ textAlign: "center" }}>Logout</Typography>

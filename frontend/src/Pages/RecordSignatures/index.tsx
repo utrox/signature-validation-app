@@ -1,5 +1,6 @@
-import { Container, Paper, Box, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
+import { Container, Paper, Box, Typography } from "@mui/material";
+
 import Page from "../../components/Page";
 import SignatureCanvas, {
   SignatureData,
@@ -55,7 +56,7 @@ const RecordSignatures = () => {
         )}
         {}
         {signatures.length < REGISTRATION_SIGNATURES_NEEDED ? (
-          <SignatureCanvas onSave={addSignature} />
+          <SignatureCanvas onSave={addSignature} isLoading={isPending} />
         ) : (
           isSuccess && (
             <Typography variant="h6" color="success" align="center">
