@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import viewsets
 
+from core.exceptions.exceptions import BadRequestException
 from .models import SignatureWorkflow
 from .serializer import (
     SignatureWorkflowListSerializer, 
@@ -35,18 +36,21 @@ class SignatureWorkflowView(viewsets.ModelViewSet):
 
     def create(self, request):
         serializer = self.get_serializer(data=request.data, context={"request": request})
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            raise BadRequestException("Invalid request.")
         workflow = serializer.save()
         return Response({"id": workflow.id}, status=201)
 
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={"request": request})
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            raise BadRequestException("Invalid request.")
         serializer.save()
         return Response({"message": "Signature verified!"})
     
     def destroy(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={"request": request})
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            raise BadRequestException("Invalid request.")
         serializer.save()
         return Response(status=204)

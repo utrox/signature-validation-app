@@ -1,11 +1,20 @@
-import "./auth.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import {
+  TextField,
+  Button,
+  Box,
+  Paper,
+  Typography,
+  CircularProgress,
+  Container,
+} from "@mui/material";
 
 import useAuth from "../../requests/useAuth";
-import PageTitle from "../../components/Routing/PageTitle";
 import axiosInstance from "../../requests/axios";
+import Page from "../../components/Page";
+import WelcomeText from "./WelcomeText";
 
 export const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -17,8 +26,6 @@ export const Register = () => {
   // Redirect to home if user is already logged in
   const { user } = useAuth();
   if (user) {
-    // Use window.location.href to reload, so we don't have
-    // to manually refetch user data.
     window.location.href = "/";
   }
 
@@ -26,67 +33,91 @@ export const Register = () => {
     e.preventDefault();
     setLoading(true);
 
-    await axiosInstance
-      .post(`/auth/register/`, {
-        email,
+    try {
+      await axiosInstance.post(`/auth/register/`, {
         username,
+        email,
         password,
-      })
-      .then((_) => {
-        toast.info("Registration successful. You can now log in.");
-        navigate("/login");
-      })
-      .finally(() => {
-        setLoading(false);
       });
+      toast.info("Registration successful. You can now log in.");
+      navigate("/login");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="register">
-      <PageTitle title="Register" />
-
-      <div className="card">
-        <div className="register-leftSide side">
-          <h1>Register</h1>
-          <form>
-            <input
-              type="text"
-              placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleRegistration}>
-              {/* TODO: better loading component */}
-              {loading ? "Loading..." : "Register"}
-            </button>
-          </form>
-        </div>
-        <div className="register-rightSide side">
-          <h1>
-            Welcome to <span id="logo">TODO name app</span>
-          </h1>
-          <p>
-            Don't worry, you only need to provide a username, email and
-            password. We'll take care of the rest, automatically generating
-            dummy data so you can test this demo.
-          </p>
-          <p>Do you already have an account?</p>
-          <div>
-            <Link to="/login">
-              <button>Log in</button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Page title="Register">
+      <Container maxWidth="md">
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            display: "flex",
+            flexDirection: { xs: "column-reverse", sm: "row" },
+            gap: 4,
+          }}
+        >
+          <Box flex={1}>
+            <Typography variant="h5" gutterBottom>
+              Register
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleRegistration}
+              display="flex"
+              flexDirection="column"
+              gap={2}
+            >
+              <TextField
+                label="Username"
+                variant="outlined"
+                fullWidth
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <TextField
+                label="Email"
+                variant="outlined"
+                type="email"
+                fullWidth
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                label="Password"
+                variant="outlined"
+                type="password"
+                fullWidth
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Button type="submit" variant="contained" disabled={loading}>
+                {loading ? <CircularProgress size={24} /> : "Register"}
+              </Button>
+            </Box>
+          </Box>
+          <Box
+            flex={1}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+          >
+            <WelcomeText />
+            <Typography variant="body2">Already have an account?</Typography>
+            <Button
+              variant="outlined"
+              component={Link}
+              to="/login"
+              sx={{ mt: 2, width: "fit-content" }}
+            >
+              Login
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
+    </Page>
   );
 };
+
+export default Register;

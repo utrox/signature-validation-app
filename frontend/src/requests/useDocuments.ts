@@ -1,22 +1,28 @@
 import axiosInstance from "./axios";
 import { useQuery } from "@tanstack/react-query";
 
-type DocumentData = {
-    id: number,
-    name: string
-}
+export type ListDocumentData = {
+  id: number;
+  name: string;
+};
 
 const useDocuments = (id: string = "") => {
-  const fetchDocuments = async (): Promise<DocumentData[]> => {
+  const fetchDocuments = async (): Promise<ListDocumentData[]> => {
     try {
-      const { data } = await axiosInstance.get<DocumentData[]>(`/api/documents/${id}`);
+      const { data } = await axiosInstance.get<ListDocumentData[]>(
+        `/api/documents/${id}`
+      );
       return data;
     } catch (error) {
       return [];
     }
   };
 
-  const { data: documents, isLoading, error } = useQuery<DocumentData[]>({
+  const {
+    data: documents,
+    isLoading,
+    error,
+  } = useQuery<ListDocumentData[]>({
     queryKey: ["documents"],
     queryFn: fetchDocuments,
     staleTime: 300000, // Cache for 5 minutes

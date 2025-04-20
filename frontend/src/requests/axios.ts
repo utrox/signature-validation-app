@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
     } else if (error?.response?.data) {
       toast.error(error.response.data);
     } else {
-      toast.error("There was an unhandled error. Please try again later.");
+      toast.error("There was an unexpected error. Please try again later.");
     }
 
     // Reject the promise to continue error flow

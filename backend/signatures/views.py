@@ -49,5 +49,5 @@ class DemoVerifySignatureView(APIView):
         # Compare with users' signatures
         errors = request.user.profile.verify_signature(serializer.model_instance())
         if errors:
-            return BadRequestException(errors)
+            raise BadRequestException(errors)
         return Response({"message": "Signature verified!"})

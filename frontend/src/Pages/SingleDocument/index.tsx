@@ -72,7 +72,7 @@ const SingleDocument = () => {
   return (
     <Page title={documentData?.name}>
       <Container maxWidth="sm">
-        <Typography variant="h3">{documentData?.name}</Typography>
+        <Typography variant="h4">{documentData?.name}</Typography>
         <DocumentInstructions />
         {isLoading ? (
           <div>Loading...</div>
