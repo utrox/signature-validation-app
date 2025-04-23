@@ -51,6 +51,7 @@ const Navbar: React.FC = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  /* More information: https://mui.com/material-ui/react-app-bar/#app-bar-with-menu */
   return (
     <>
       <AppBar position="static" sx={{ marginBottom: 4 }}>

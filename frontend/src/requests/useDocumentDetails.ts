@@ -5,7 +5,9 @@ import { DocumentData } from "../types/dynamic_form";
 const useDocumentDetails = (id: string) => {
   const fetchDocumentDetails = async (): Promise<DocumentData | null> => {
     try {
-      const { data } = await axiosInstance.get<DocumentData>(`/api/documents/${id}`);
+      const { data } = await axiosInstance.get<DocumentData>(
+        `/api/documents/${id}/`
+      );
       return data;
     } catch (error) {
       return null;
