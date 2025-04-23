@@ -13,6 +13,7 @@ from .serializers import SignatureSerializer
 
 class RegisterSignatureView(APIView):
     permission_classes = [IsAuthenticatedWithUserProfile]
+    
     def post(self, request):
         serializer = SignatureSerializer(data=request.data, many=True, context={'request': request})
         
