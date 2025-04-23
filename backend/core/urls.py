@@ -17,7 +17,8 @@ Including another URLconf
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
+from .views import serve_react
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +27,11 @@ urlpatterns = [
     path('api/documents/', include('documents.urls')),
     path('api/signatures/', include('signatures.urls')),
     path('api/workflows/', include('signature_workflows.urls')),
+    re_path(
+        r"^(?P<path>.*)$",
+        serve_react,
+        {"document_root": settings.REACT_APP_BUILD_PATH}
+    )
 ]
 
 # Used for serving static files in a development environment.

@@ -5,7 +5,7 @@ const PageTitle = ({ title }: { title?: string }) => {
   const location = useLocation();
 
   useEffect(() => {
-    document.title = `Oh, TP Bank${title ? ` | ${title}` : ""}`;
+    document.title = `D.A.M.N.${title ? ` | ${title}` : ""}`;
   }, [location, title]);
 
   return null;

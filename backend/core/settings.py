@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 import mimetypes
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,8 +50,8 @@ INSTALLED_APPS = [
     'simple_history',
     'documents',
     'signatures',
-    'signature_workflows',
-    'form_builder',
+    'signature_workflows.apps.SignatureWorkflowAppConfig',
+    'form_builder.apps.FormBuilderAppConfig',
     'users',
     'authentication'
 ]
@@ -143,9 +144,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+REACT_APP_BUILD_PATH= BASE_DIR / "client"
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'form_builder', 'static'),) 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'form_builder', 'static'), REACT_APP_BUILD_PATH]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -165,7 +167,7 @@ AUTH_USER_MODEL = 'users.User'
 # hours debugging why the CSRF cookie is not being sent to the backend when you have everything set up correctly,
 # and you'll think about switching careers to be a tram driver instead.
 CSRF_COOKIE_SAMESITE = 'Strict' if IS_PRODUCTION else 'Lax'
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,http://localhost:8000').split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('APP_CSRF_TRUSTED_ORIGINS', 'http://localhost:5173,http://localhost:8000').split(',')
 
 CORS_ALLOWED_ORIGINS = os.environ.get('APP_CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:8000').split(',')
 CORS_ALLOW_CREDENTIALS = True
@@ -199,3 +201,60 @@ REGISTRATION_SIGNATURES_COUNT = 10
 
 SIGNATURE_SIMILARITY_THRESHOLD = 0.85
 MAX_REJECTED_SIGNATURES = 5
+
+
+# Unfold admin settings:
+UNFOLD = {
+    "SITE_TITLE": "D.A.M.N. Admin",
+    "SITE_HEADER": "D.A.M.N. Admin",
+    "SHOW_VIEW_ON_SITE": False,
+    "SIDEBAR": {
+        "navigation": [
+            {
+                "title": "Navigation", 
+                "items": [
+                    {
+                        "title": "Dashboard",
+                        "link": reverse_lazy("admin:index"),
+                        "icon": "dashboard",
+                    },
+                    {
+                        "title": "Documents",
+                        "link": reverse_lazy("admin:documents_document_changelist"),
+                        "icon": "file_copy",
+                    },
+                    {
+                        "title": "Document forms",
+                        "link": reverse_lazy("admin:form_builder_documentform_changelist"),
+                        "icon": "dynamic_form",
+                    },
+                    {
+                        "title": "Signature Workflows",
+                        "link": reverse_lazy("admin:signature_workflows_signatureworkflow_changelist"),
+                        "icon": "edit_document",
+                    },
+                    
+                ]
+            },
+            {
+                "title": "Authentication",
+                "items": [
+                    {
+                        "title": "Authentication groups",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                        "icon": "group",
+                    },
+                    {
+                        "title": "Users",
+                        "link": reverse_lazy("admin:users_user_changelist"),
+                        "icon": "person",
+                    },
+                    {
+                        "title": "User profiles",
+                        "link": reverse_lazy("admin:users_userprofile_changelist"),
+                        "icon": "account_box",
+                    },
+            ]}
+        ]
+    }
+}
