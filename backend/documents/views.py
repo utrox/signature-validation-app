@@ -3,8 +3,10 @@ import json
 from django.http import FileResponse
 from rest_framework import generics, mixins
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAdminUser
 
 from core.exceptions.exceptions import NotFoundException, BadRequestException
+from authentication.permissions import RegisteredSignatures
 from signature_workflows.models import SignatureWorkflow, WorkflowStatus
 from .models import Document
 from .serializers import DocumentDetailsSerializer, DocumentListSerializer
@@ -12,9 +14,8 @@ from .generator import generate_pdf_response
 
 
 class DocumentGeneratorView(APIView):
-    # TODO permission class to only allow users, not admins to visit. 
-    # TODO: windows installation is dummy stupid: https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation
-    # write about it in readme docs and figure out CI.   
+    permission_classes = [IsAdminUser|RegisteredSignatures]
+
     def post(self, request):
         """
         Handles the POST request to generate a document preview.
@@ -107,6 +108,7 @@ class DocumentGeneratorView(APIView):
 class DocumentListView(generics.GenericAPIView, mixins.ListModelMixin):
     queryset = Document.objects.filter(is_active=True)  # Only active documents
     serializer_class = DocumentListSerializer
+    permission_classes = [IsAdminUser|RegisteredSignatures]
     
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs) 
@@ -116,6 +118,7 @@ class SingleDocumentView(generics.GenericAPIView, mixins.RetrieveModelMixin):
     queryset = Document.objects.filter(is_active=True) 
     serializer_class = DocumentDetailsSerializer
     lookup_field = "id"
+    permission_classes = [IsAdminUser|RegisteredSignatures]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
