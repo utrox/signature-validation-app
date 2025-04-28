@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 
 from core.exceptions.exceptions import BadRequestException
+from authentication.permissions import IsAuthenticatedWithUserProfile, RegisteredSignatures
 from .models import SignatureWorkflow
 from .serializer import (
     SignatureWorkflowListSerializer, 
@@ -13,7 +14,11 @@ from .serializer import (
 
 class SignatureWorkflowView(viewsets.ModelViewSet):
     lookup_field = "id"
-    # TODO: permissions!! 
+    permission_classes = [
+        IsAuthenticatedWithUserProfile,
+        RegisteredSignatures
+    ]
+
     def get_queryset(self):
         return SignatureWorkflow.objects.filter(user=self.request.user).order_by("-created_at")
     

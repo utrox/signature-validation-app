@@ -3,6 +3,7 @@ from .models import Document
 
 from form_builder.serializers import DocumentFormSerializer
 
+
 class DocumentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document

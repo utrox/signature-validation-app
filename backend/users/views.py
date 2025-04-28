@@ -22,6 +22,7 @@ def me_view(request):
         return JsonResponse(None, safe=False)
 
     return JsonResponse({
+        "is_admin": request.user.is_staff,
         "is_signatures_recorded": len(request.user.signatures.all()) >= settings.REGISTRATION_SIGNATURES_COUNT,
     })
 

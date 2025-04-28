@@ -6,16 +6,17 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED
 
+from authentication.permissions import IsAuthenticatedWithUserProfile, RegisteredSignatures
 from core.exceptions.exceptions import BadRequestException
 from .serializers import SignatureSerializer
 
 
 class RegisterSignatureView(APIView):
-    # TODO: permission group -> users
+    permission_classes = [IsAuthenticatedWithUserProfile]
+    
     def post(self, request):
         serializer = SignatureSerializer(data=request.data, many=True, context={'request': request})
         
-        # TODO: Permission class instead?
         if len(request.user.signatures.all()) >= settings.REGISTRATION_SIGNATURES_COUNT:
             raise ValidationError("You've already registered your signatures.")
         
@@ -37,9 +38,10 @@ class RegisterSignatureView(APIView):
 
 
 class DemoVerifySignatureView(APIView):
-    # TODO: permission:
-    #   - only non-staff users
-    #   - only users that have uploaded signatures
+    permission_classes = [
+        RegisteredSignatures
+    ]
+
     def post(self, request):
         serializer = SignatureSerializer(data=request.data, many=False, context={'request': request})
 
