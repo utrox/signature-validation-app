@@ -132,7 +132,7 @@ class SignatureVerificationSerializer(serializers.Serializer):
         workflow.status = WorkflowStatus.ACCEPTED
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         file_name = f"{workflow.document.name}_{workflow.user.username}_{timestamp}.pdf"
-        workflow.document_file.save(file_name, ContentFile(generated_pdf))  # ✅ Save correctly
+        workflow.document_file.save(file_name, ContentFile(generated_pdf))  
         workflow.save()
 
         return workflow

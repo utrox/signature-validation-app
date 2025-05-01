@@ -5,9 +5,10 @@ import cv2
 from sklearn.metrics.pairwise import cosine_similarity
 from PIL import Image
 
-# Only import tf when running the server, otherwise every other command
-# for example migrations we'd have to wait for the model to load. 
-if 'runserver' in sys.argv:
+# Only import tf when running the server or tests, otherwise
+# we'd have to wait for the model to load when running 
+# every other command, for example migrations. 
+if 'runserver' or 'test' in sys.argv:
     import tensorflow as tf
     MODEL = tf.keras.applications.MobileNetV2(weights="imagenet", include_top=False, pooling='avg')
 

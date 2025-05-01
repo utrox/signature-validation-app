@@ -75,11 +75,10 @@ class UserProfile(models.Model):
         failures = []
         for sig in stored_signatures:
             res = sig.compare_signature(signature_instance)
-            print("Comparing with: ", sig, "Result: ", res) 
             if res < settings.SIGNATURE_SIMILARITY_THRESHOLD:
                 failures.append({"similarity": res, "signature": sig,})
         
-        print("Failed: ", failures)
+        print("Failed signatures: ", failures)
         if len(failures) > 1:
             return "Signature does not match your valid signatures."
     

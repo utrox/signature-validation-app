@@ -25,7 +25,7 @@ def generate_pdf(doc_id: int, context: dict) -> bytes:
     return pdf
 
 
-def generate_pdf_response(doc_id, context):
+def generate_pdf_response(doc_id: int, context: dict) -> HttpResponse:
     """
     Generates a PDF response for the generated using the given document's template and the context.
     Args:

@@ -20,7 +20,7 @@ class DocumentGeneratorView(APIView):
         """
         Handles the POST request to generate a document preview.
         This method generates a preview of a document based on the provided data.
-        It supports two scenarios:
+        It supports three scenarios:
         1. Generating a preview before submitting the form data (using `document_id` and `form_data`).
         2. Generating a preview for an existing but not yet signed workflow instance (using `workflow_id`). In this case, 
             the form_data is read from the workflow instance.

@@ -6,7 +6,7 @@ const Footer = () => {
     <footer>
       <p>footer placeholder</p>
       <p>
-        Made with 🍺 by <a href="http://github.com/utrox">Bence</a>.
+        Made with 🏍️ by <a href="http://github.com/utrox">Bence</a>.
       </p>
       <p>All rights reserved. © 2025</p>
     </footer>
