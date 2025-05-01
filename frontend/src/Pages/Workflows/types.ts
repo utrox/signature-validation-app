@@ -12,7 +12,7 @@ export type Order = "asc" | "desc";
 
 export const WORKFLOW_STATUSES = {
   submitted: {
-    label: "Awaiting review",
+    label: "Awaiting Review",
     icon: createElement(HourglassEmpty, { style: { color: "orange" } }),
     instruction:
       "Your document has been submitted and is awaiting review by a clerk. No action needed from your part yet, kick back and relax.",

@@ -27,6 +27,7 @@ const useDocuments = (id: string = "") => {
     queryFn: fetchDocuments,
     staleTime: 300000, // Cache for 5 minutes
     retry: 1,
+    refetchOnMount: true,
   });
 
   return { documents, isLoading, error };

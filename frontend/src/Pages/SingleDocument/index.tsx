@@ -55,7 +55,7 @@ const SingleDocument = () => {
 
     // Add form fields (document_id, form_data) to the form
     addHiddenField(form, "document_id", id);
-    addHiddenField(form, "form_data", JSON.stringify(formData));
+    addHiddenField(form, "form_data", JSON.stringify(formData || {}));
 
     const csrfToken = getCSRFToken();
     if (csrfToken) {

@@ -23,6 +23,7 @@ const useWorkflows = () => {
     queryFn: fetchWorkflows,
     staleTime: 300000, // Cache for 5 minutes
     retry: 1,
+    refetchOnMount: true,
   });
 
   return { workflows, isLoading, error };

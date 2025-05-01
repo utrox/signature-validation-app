@@ -56,7 +56,7 @@ class DocumentGeneratorView(APIView):
         if not Document.objects.filter(is_active=True, id=document_id).exists():
             raise NotFoundException("Document not found.")
         
-        form_data = request.data.get("form_data", {})
+        form_data = request.data.get("form_data", '{}')
 
         # Check for formdata validity.
         if isinstance(form_data, str):
