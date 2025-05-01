@@ -29,6 +29,8 @@ const loginPages = [
   { name: "Register", url: "/register" },
 ];
 
+/* More information: https://mui.com/material-ui/react-app-bar/#app-bar-with-menu */
+/* This component was made with the help of the above example of the best practices, from the official documentation. */
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState<boolean>(false);
@@ -51,7 +53,6 @@ const Navbar: React.FC = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
-  /* More information: https://mui.com/material-ui/react-app-bar/#app-bar-with-menu */
   return (
     <>
       <AppBar position="static" sx={{ marginBottom: 4 }}>
