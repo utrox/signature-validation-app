@@ -74,7 +74,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            "document_templates"
+            BASE_DIR / "document_templates",
+            BASE_DIR / "documents/tests/data"
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -177,6 +178,7 @@ CORS_ALLOW_HEADERS = [
     'csrftoken',
     'authorization',
 ]
+
 CORS_ALLOW_METHODS = [
     "GET",
     "POST",

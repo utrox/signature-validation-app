@@ -29,6 +29,7 @@ class RegisterSignatureView(APIView):
             with transaction.atomic():
                 serializer.save()
         except Exception as e:
+            print("Error saving signatures:", e)
             raise BadRequestException(f"Failed to save signatures. Please try again later, service might be down.")
         
         return Response(

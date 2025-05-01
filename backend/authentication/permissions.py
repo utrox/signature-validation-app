@@ -17,4 +17,4 @@ class RegisteredSignatures(BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.signatures.count() >= settings.REGISTRATION_SIGNATURES_COUNT
+        return request.user.is_authenticated and request.user.signatures.count() >= settings.REGISTRATION_SIGNATURES_COUNT
